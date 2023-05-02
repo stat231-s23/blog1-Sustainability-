@@ -1,7 +1,7 @@
 ---
-title: "Your Project Title Here"
-author: "Your team member names here"
-date: "Add a date"
+title: "Sustainability"
+author: "Kori Barach, Hannah Kim, Alex Rich"
+date: "May 9th, 2023"
 output:
   rmdformats::readthedown:
     highlight: "kate"
@@ -20,9 +20,12 @@ library(tidyverse)
 
 ```
 
-# Intro
+# Introduction 
 
-This is an R Markdown blog template. This document will be knit to HTML to produce a webpage that will be hosted publicly via GitHub.
+  We all have a role to play in creating a sustainable future for ourselves and for generations to come. One of the most pressing issues we face today is the high level of energy consumption and the resulting impact on the environment. In 2021, the United States alone consumed a staggering 3,930 terawatt hours of energy, with a significant portion of it coming from non-renewable sources like fossil fuels. This has a detrimental effect on the environment, contributing to climate change, air and water pollution, and other environmental issues. Melting glaciers are threatening to flood our valuable land and cities. An estimated 15 million people around the world are at risk of suffering sudden, deadly, and destructive flooding events due to the warming climate. By caring about sustainability and making conscious choices about energy use, we can help to reduce our carbon footprint and create a more sustainable future.
+  
+  At Amherst College, we have a responsibility to reduce our energy consumption and minimize our environmental impact. By reducing energy consumption, we can save money and preserve resources for future generations. In our analysis, we look at sustainability within a few freshman dorms at Amherst College. We then look at data across the world and compare energy consumption country-to-country. Our goal is to bring attention to just how much energy is consumed and consequently allow readers to analyze their own carbon footprints.
+
 
 ## Website publication work flow
 
@@ -54,9 +57,9 @@ Take note of the the default code chunk options in the `setup` code chunk. For e
 
 ## Links 
 
-You can include [links](https://www.datadreaming.org/post/r-markdown-theme-gallery/) using Markdown syntax as shown. 
+Here is the link to our Shiny App on Sustainability of Amherst College Dorms:
 
-You should include links to relevant sites as you write. You should additionally include a list of references as the end of your blog with full citations (and relevant links).
+[Shiny App](https://hankim25.shinyapps.io/shiny1-sustainability/) 
 
 
 ## Visualizations 
@@ -76,8 +79,8 @@ You may embed a published Shiny app in your blog if useful, but be aware that th
 
 Any Shiny apps embedded in your blog should be accompanied by the link to the published Shiny app (I did this using a figure caption in the code chunk below, but you don't have to incorporate the link in this way).
 
-```{r ds-salaries-app, out.width = "100%", out.extra = 'data-external="1" frameborder="no"', fig.cap = "[Data Science Salaries Shiny App](https://bebailey.shinyapps.io/data-science-salaries)"}
-knitr::include_app("https://bebailey.shinyapps.io/data-science-salaries",
+```{r ds-salaries-app, out.width = "100%", out.extra = 'data-external="1" frameborder="no"', fig.cap = "[Data Science Salaries Shiny App](https://hankim25.shinyapps.io/shiny1-sustainability/)"}
+knitr::include_app("https://hankim25.shinyapps.io/shiny1-sustainability/",
                    height = "500px")
 ```
 
@@ -135,35 +138,8 @@ You may also use Markdown syntax for displaying images as shown below, but code 
 Either way, the file path can be a local path within your project directory or a URL for an image hosted online. This syntax works for PNG, PDF, JPG, and even GIF formats.
 
 
-## Videos
-
-You can use code chunks or Markdown syntax include links to any valid YouTube or Vimeo URLs (see [here](https://bookdown.org/yihui/rmarkdown/learnr-videos.html) for details) or point to a location within your project directory. 
-
-Code chunk:
-
-```{r, out.width="80%", fig.align="center"}
-knitr::include_url("https://www.youtube.com/watch?v=up8ODGFWgFg")
-```
-
-Markdown syntax:
-
-![](https://www.youtube.com/watch?v=up8ODGFWgFg){width="90%"}
 
 
-You may need to push your updates to GitHub to see if the videos work.
-
-
-
-
-## Equations
-
-You might include equations if part of the purpose of your blog is to explain a statistical method. There are two ways to include equations:
-
-* Inline: $b \sim N(0, \sigma^2_b)$
-* Display-style (displayed on its own line): 
-$$\frac{\sigma^2_b}{\sigma^2_b + \sigma^2_e}$$
-
-For typesetting equations appropriately, check out the [AMS-LaTeX quick reference](https://github.com/manuelemacchia/math-latex/blob/master/amsmath.pdf) or take a look at the *Symbols in math mode* section of this  [cheat sheet](https://users.dickinson.edu/~richesod/latex/latexcheatsheet.pdf)  (or do some extra Googling---there are *many* resources).
 
 
 
@@ -274,40 +250,87 @@ Further customization requires adding a CSS style file or code chunk or incorpor
 
 # References
 
-All data sources, any key R packages, and any other sources used in developing your blog should be cited in full in a list of references at the end of your blog. Your blog post should also link to these sources as they are discussed. You may choose any reference style as long as sources are fully cited (try to be consistent!).
-
-Typically, references in R Markdown (and LaTeX) files are [incorporated with a BibTeX database](https://bookdown.org/yihui/rmarkdown-cookbook/bibliography.html) (a .bib file). You can try this approach or manually include either a numbered or alphabetized list. 
-
-Columbia University has compiled some guidance on [how to cite data](https://guides.library.columbia.edu/datacitation). Some data sources will give you the citation information to copy and paste. Use the provided citations or citation styles in those cases.
-
 You can list R package citations with the code `citation("packageName")` in the console and then copy (and reformat as needed) the relevant text, e.g.,
 ```{r}
-citation("DT")
+citation("png")
 ```
 
 The following citations are based on the American Statistical Association citation style (not all of these references are used in this document).:
 
 
 <!-- Textbook -->
-Baumer, B. S., Kaplan, D. T., and Horton, N. J. (2021), *Modern Data Science with R* (2nd ed.), Boca Raton, FL: CRC Press.
-
-<!-- Journal article -->
-Broman, K. W. and Woo, K. H. (2018), "Data Organization in Spreadsheets," *The American Statistician*, 72:1, 2-10, doi: [10.1080/00031305.2017.1375989](https://doi.org/10.1080/00031305.2017.1375989)
+1. Baumer, B. S., Kaplan, D. T., and Horton, N. J. (2021), *Modern Data Science with R* (2nd ed.), Boca Raton, FL: CRC Press.
 
 <!-- Website -->
-Columbia University Libraries (n.d.), "Data Citation," available at <https://guides.library.columbia.edu/datacitation>.
+2. “U.S. electricity consumption 2021.” Statista, 25 January 2023, https://www.statista.com/statistics/201794/us-electricity-consumption-since-1975/. Accessed 2 May 2023.
 
 <!-- Journal article -->
-McNamara, A. and Horton N. J. (2018) "Wrangling Categorical Data in R," *The American Statistician*, 72:1, 97-104, doi: [10.1080/00031305.2017.1356375](https://doi.org/10.1080/00031305.2017.1356375).
+3. Jones, Benji. “Pakistan flooding: How melting glaciers fueled the disaster.” Vox, 30 August 2022, https://www.vox.com/science-and-health/2022/8/30/23327341/pakistan-flooding-monsoon-melting-glaciers-climate-change. Accessed 2 May 2023.
 
 <!-- Dataset -->
-Shah, Syed A. A. (October 2022), "Starbucks Drinks" (Version 1), *Kaggle*, available at <https://www.kaggle.com/datasets/syedasimalishah/starbucks-drinks>.
+4. “Home.” Kaggle, https://www.kaggle.com/datasets/truecue/worldsustainabilitydataset?resource=download. Accessed 2 May 2023.
 
 <!-- R package -->
-Xie Y, Cheng J, Tan X (2022). "DT: A Wrapper of the JavaScript Library 'DataTables'," R package version 0.24, available at <https://CRAN.R-project.org/package=DT>.
+5. Wickham H, Averick M, Bryan J, Chang W, McGowan LD, François R,
+  Grolemund G, Hayes A, Henry L, Hester J, Kuhn M, Pedersen TL, Miller E,
+  Bache SM, Müller K, Ooms J, Robinson D, Seidel DP, Spinu V, Takahashi K,
+  Vaughan D, Wilke C, Woo K, Yutani H (2019). “Welcome to the tidyverse.”
+  _Journal of Open Source Software_, *4*(43), 1686.
+  doi:10.21105/joss.01686 <https://doi.org/10.21105/joss.01686>. 
   
+6. Robinson D, Hayes A, Couch S (2023). _broom: Convert Statistical Objects
+  into Tidy Tibbles_. R package version 1.0.3,
+  <https://CRAN.R-project.org/package=broom>.
+  
+7. Slowikowski K (2023). _ggrepel: Automatically Position Non-Overlapping
+  Text Labels with 'ggplot2'_. R package version 0.9.3,
+  <https://CRAN.R-project.org/package=ggrepel>.
 
+8. Schloerke B, Cook D, Larmarange J, Briatte F, Marbach M, Thoen E, Elberg
+  A, Crowley J (2021). _GGally: Extension to 'ggplot2'_. R package version
+  2.1.2, <https://CRAN.R-project.org/package=GGally>.
+  
+9. Wickham H, Hester J, Bryan J (2022). _readr: Read Rectangular Text
+  Data_. R package version 2.1.3,
+  <https://CRAN.R-project.org/package=readr>.
+  
+10. Becker OScbRA, Minka ARWRvbRBEbTP, Deckmyn. A (2022). _maps: Draw
+  Geographical Maps_. R package version 3.4.1,
+  <https://CRAN.R-project.org/package=maps>.
+  
+11. Cheng J, Karambelkar B, Xie Y (2023). _leaflet: Create Interactive Web
+  Maps with the JavaScript 'Leaflet' Library_. R package version 2.1.2,
+  <https://CRAN.R-project.org/package=leaflet>.
+  
+12. Pebesma, E., 2018. Simple Features for R: Standardized Support for
+  Spatial Vector Data. The R Journal 10 (1), 439-446,
+  https://doi.org/10.32614/RJ-2018-009 
+  
+13. Bryan J (2023). _gapminder: Data from Gapminder_. R package version
+  1.0.0, <https://CRAN.R-project.org/package=gapminder>.
+  
+14. H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag
+  New York, 2016.
 
- 
+15. Benjamin S. Baumer, Daniel T. Kaplan, Nicholas J. Horton (2021). Modern
+  Data Science with R. 2nd edition, Chapman and Hall/CRC Press: Boca
+  Raton, 1--673. URL
+  https://www.routledge.com/Modern-Data-Science-with-R/Baumer-Kaplan-Horton/p/book/9780367191498.
 
+16. Wickham H, François R, Henry L, Müller K, Vaughan D (2023). _dplyr: A
+  Grammar of Data Manipulation_. R package version 1.1.0,
+  <https://CRAN.R-project.org/package=dplyr>.
+  
+17. Pedersen T, Robinson D (2022). _gganimate: A Grammar of Animated
+  Graphics_. R package version 1.0.8,
+  <https://CRAN.R-project.org/package=gganimate>.
+
+18. Pedersen T (2022). _transformr: Polygon and Path Transformations_. R
+  package version 0.1.4, <https://CRAN.R-project.org/package=transformr>.
+
+19. Ooms J (2022). _gifski: Highest Quality GIF Encoder_. R package version
+  1.6.6-1, <https://CRAN.R-project.org/package=gifski>.
+
+20. Urbanek S (2022). _png: Read and write PNG images_. R package version
+  0.1-8, <https://CRAN.R-project.org/package=png>.
 
