@@ -94,6 +94,10 @@ knitr::include_graphics("img/image1.PNG")
 
 The easy thing to do is to go about your life and pretend nothing is happening. Ignorance is bliss, right? If everyone reading this thought this way, our sustainability habits would worsen. Caring about sustainability and taking action to address climate change is not only important, it is absolutely crucial for the survival of our planet and all the living beings that call it home. Ignoring climate change and continuing with unsustainable practices not only harms the environment but also has serious social and economic consequences. We are already witnessing the devastating effects of climate change, including rising sea levels, more frequent and severe natural disasters, and the displacement of vulnerable populations. We cannot continue to turn a blind eye to these issues and expect things to get better on their own. It is our responsibility to take action and make the necessary changes in our daily lives, as well as advocate for systemic changes at a larger scale. By prioritizing sustainability and addressing climate change, we can create a better future for ourselves and for future generations.
 
+```{r, fig.cap= Climate change is a real threat, out.width="80%", fig.align="center"}
+knitr::include_graphics("img/image4.PNG")
+```
+
 ## Data Collection
 
 The data from our Shiny App came from the Amherst College Office of Sustainability. As technology advances, the Sustainability Office has more access to resources that allow us to track energy consumption. In the newer dorms, the office is even able to track water usage. This data is not publicly available. As Amherst College students, we were able to meet with Weston Dripps, the Director of Sustainability. He kindly pulled the energy consumption data from North, South, James, and Stearns during the 2021-22 academic year. The original data is in an Excel file. 
@@ -273,16 +277,20 @@ You can make a numbered list like this
 
 
 
-## Column formatting
+## How to Increase Sustainability
 
 <!-- Begin columns environment -->
 :::::: {style="display: flex; font-size: large;"}
 
 <!-- Create a column -->
 ::: {}
-### Content Column 1
+### 10 Easy Tips
 
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse vel ipsum eu sem facilisis porttitor. Integer eu tristique lectus. Vestibulum nisi risus, porta sit amet cursus nec, auctor ac tellus. Integer egestas viverra rhoncus. Fusce id sem non ante vestibulum posuere ac sed lorem. Proin id felis a mi pellentesque viverra in at nulla. Duis augue nulla, aliquet ac ligula a, sagittis varius lorem.
+
+
+```{r, out.width="80%", fig.align="center"}
+knitr::include_graphics("img/image2.PNG")
+```
 
 
 
@@ -296,15 +304,12 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Suspendisse vel ipsum e
 <!-- Create another column -->
 ::: {}
 
-### Content Column 2
+### Be More Sustainable Now
 
-Aliquam non ante et erat luctus hendrerit eu ac justo. Fusce lacinia pulvinar neque non laoreet. Fusce vitae mauris pharetra, scelerisque purus eget, pharetra nisl. Aenean volutpat elementum tortor vitae rhoncus. Phasellus nec tellus euismod neque congue imperdiet tincidunt in mauris. Morbi eu lorem molestie, hendrerit lorem nec, semper massa. Sed vulputate hendrerit ex, eget cursus purus. Pellentesque consequat erat leo, eleifend porttitor lacus porta at. Vivamus faucibus quam ipsum, id condimentum ligula malesuada ultrices. Nullam luctus leo elit, vitae rutrum nibh venenatis eget. Nam at sodales purus. Proin nulla tellus, lacinia eget pretium sed, vehicula aliquet neque. Morbi vel eros elementum, suscipit elit eu, consequat libero. Nulla nec aliquet neque. Nunc bibendum sapien lectus, sed elementum nisi rutrum non. Ut vulputate at lacus eget maximus.
-
-```{r, out.width="80%", fig.align="right"}
-mtcars %>% 
-  ggplot(aes(x = wt, y = mpg)) +
-  geom_point()
+```{r, out.width="80%", fig.align="center"}
+knitr::include_graphics("img/image3.PNG")
 ```
+
 
 :::
 ::::::
@@ -359,6 +364,15 @@ Further customization requires adding a CSS style file or code chunk or incorpor
 
 <!-- Website -->
 2. “U.S. electricity consumption 2021.” Statista, 25 January 2023, https://www.statista.com/statistics/201794/us-electricity-consumption-since-1975/. Accessed 2 May 2023.
+
+<!-- Website -->
+3. “Quick and easy ways to live a more sustainable life. | Thing 1, Vacances, Plastique.” Pinterest, https://www.pinterest.com/pin/520025088223297694/. Accessed 3 May 2023.
+
+<!-- Website -->
+4. “10 tips on how you can be more sustainable.” Cellugy, 3 February 2022, https://www.cellugy.com/blog/10-tips-on-how-you-can-be-more-sustainable. Accessed 3 May 2023.
+
+<!-- Website -->
+5. “278,500+ Climate Change Stock Photos, Pictures & Royalty-Free Images.” iStock, https://www.istockphoto.com/photos/climate-change. Accessed 3 May 2023.
 
 <!-- Journal article -->
 3. Jones, Benji. “Pakistan flooding: How melting glaciers fueled the disaster.” Vox, 30 August 2022, https://www.vox.com/science-and-health/2022/8/30/23327341/pakistan-flooding-monsoon-melting-glaciers-climate-change. Accessed 2 May 2023.
