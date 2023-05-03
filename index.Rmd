@@ -86,7 +86,7 @@ initialwrangle <- newdata %>%
   
 
 
-```{r, fig.cap='"Safe Space" by artist Kenesha Sneed', out.width="80%", fig.align="center"}
+```{r, fig.cap=paste("Pakistan's Floods from Global Warming"), out.width="80%", fig.align="center"}
 knitr::include_graphics("img/image1.PNG")
 ```
 
@@ -94,7 +94,7 @@ knitr::include_graphics("img/image1.PNG")
 
 The easy thing to do is to go about your life and pretend nothing is happening. Ignorance is bliss, right? If everyone reading this thought this way, our sustainability habits would worsen. Caring about sustainability and taking action to address climate change is not only important, it is absolutely crucial for the survival of our planet and all the living beings that call it home. Ignoring climate change and continuing with unsustainable practices not only harms the environment but also has serious social and economic consequences. We are already witnessing the devastating effects of climate change, including rising sea levels, more frequent and severe natural disasters, and the displacement of vulnerable populations. We cannot continue to turn a blind eye to these issues and expect things to get better on their own. It is our responsibility to take action and make the necessary changes in our daily lives, as well as advocate for systemic changes at a larger scale. By prioritizing sustainability and addressing climate change, we can create a better future for ourselves and for future generations.
 
-```{r, fig.cap= Climate change is a real threat, out.width="80%", fig.align="center"}
+```{r, fig.cap=paste("Melting Glaciers"), out.width="80%", fig.align="center"}
 knitr::include_graphics("img/image4.PNG")
 ```
 
@@ -105,10 +105,11 @@ The data from our Shiny App came from the Amherst College Office of Sustainabili
 The worldwide data comes from Kaggle, a trusted web browser that gives users access to large, downloadable datasets. This dataset titled, “World Sustainability Dataset” tracks the sustainability of 173 countries over 19 years. We have data on the years 2000-2018. Below is a link to the original dataset. 
 
 
+# Content
 
-# Content {.tabset}
+## Figure 1 
 
-The figure below shows World GDP over time. 
+It is clear that the US, Canada, Australia and and Europe have the highest GDP. Moreover, it appears that the highest GDP comes from the Scandinivian countries. For the other countries, their GDP was really low in the early 2000s but many of these countries has seen rise in their GDP. The US, Canada, Australia, and Europe have also seen dramatic growth in their GDP. Africa stands out in particular, as starting with extremely low GDP and really not increasing it in the span of 19 years. Some reasons why GDP might be low is because there might be a lack of recourses as a result of a countries location, climate, and political stability. Moreover, a country with poor infastructure might lead to lower GDP because it makes it difficult to transfer and move the goods. Finally, a country’s technological status and education is key for GDP growth because they help develop new ideas, goods, and products.
 ```{r}
 #####GDP
 world_map <- map_data(map="world")
@@ -132,6 +133,10 @@ visual1 <- ggplot(chloropleth.gdp, aes(x=long, y=lat, group = group, #creates th
 animate(fps = 4, visual1, nframes = 19)
 ```
 
+## Figure 2
+
+Through our finding in renewable energy consumption, it is clear that the African countries have greater levels of energy consumption. It is illustrated that Asia, the Middle East, and North America have lower levels of renewable energy consumption. When looking at the changes over the years, one dramatic change is that the US is increasing its renewable energy consumption and countries in Asia are decreasing their renewable energy consumption. Moreover, Europe has been increasing their renewable energy consumption as well. 
+
 ```{r}
 ######Energy Consumption
 chloropleth.renew <- initialwrangle %>% 
@@ -154,7 +159,78 @@ visual2 <- ggplot(chloropleth.renew, aes(x=long, y=lat, group = group, #creates 
 animate(fps = 4, visual2, nframes = 19)
 ```
 
+## Figure 3
+
+For annual production based emissions of carbon dioxide, it is illustrated that the countries with the greatest levels of carbon dioxide emissions are the United States, Russia, China, and India. However, over the span of the 19 years Russia has not changes at all. Another change is that the United States has reduced their carbon emissions in the span of the 19 year. China and India have moved in opposite directions, as they have increased their carbon dioxide emissions in the 19 year span. Another country that has increased their carbon dioxide emissions is Brazil. The most noticeable change on the map is the extreme amount of carbon emissions that China increases in. In the early 2000s China’s emissions were less than the United States, and at the end of the 19 year period the country pretty much doubles their emissions are the country changed to the color red on the map. Therefore, one could make the conclusion that the US is headed in the right direction of improving their approach to sustainability and countries like China, India, and Brazil are headed in the opposite direction.
+
+```{r}
+######Annual Production-Based Emissions of Carbon Dioxide (CO2), measured in million tonnes
+chloropleth.co2_emit <- initialwrangle %>% 
+  rename('co2_emit' = 'Annual Production-Based Emissions of CO2') %>%
+  arrange(Country) %>%
+  #filter(Year == 2018) %>%
+    right_join(world_map, by = c("Country"= "region"))
+visual3 <- ggplot(chloropleth.co2_emit, aes(x=long, y=lat, group = group, #creates the plot
+                                      fill = co2_emit)) +
+  geom_polygon() +
+  labs(fill = "CO2 Emissions"
+       , title = "Figure 3 - Annual Production-Based Emissions of Carbon Dioxide (CO2)"
+       , subtitle = "measured in million tonnes"
+       ) +
+  scale_fill_distiller(palette = "Spectral")
+
+animate(fps = 4, visual3, nframes = 19)
+```
+
+## Figure 4
+
+The next map, presents the percentage of a country’s population with electricity access. Here, it is evident that mainly every continent besides Africa has access to electricity. There are a few exceptions however; Mongolia, India, and the north western countries in South America have slightly lower than 100% of the population with electricity access. However, during the 19 years presented in the graph, all of these countries have increased their electricity access. The continent of Africa, despite the northern of Africa, have extremely low energy access. There has been slight improvements in increase the access of electricity, but over the span of 19 years there really hasn’t been any significant changes. This lack of electricity is an extreme issue, which is a detriment to the daily lives of those who live there. Electricity is vital for healthcare, education, and communication. Moreover, this can lead to lower economic growth and fewer job opportunities. Less electricity can play a direct role on the sustainability of the environment. First, those without electricity create energy by burning biomass, often resulting in air pollution, deforestation and many other climate problems. 
+
+```{r, out.width="50%"}
+#####Access to Electricity (% of population) 
+chloropleth.electricity <- initialwrangle %>% 
+  rename('electricity' = 'Access to Electricity (% of Pop)') %>%
+  arrange(Country) %>%
+  filter(Year == 2018) %>%
+    right_join(world_map, by = c("Country"= "region"))
+visual4 <- ggplot(chloropleth.electricity, aes(x=long, y=lat, group = group, #creates the plot
+                                      fill = electricity)) +
+  geom_polygon() +
+  labs(fill = "% or Population w/ \n Access to Electricity"
+       , title = "Figure 4 - Access to Electricity"
+       , subtitle = "% of population"
+       ) +
+  scale_fill_distiller(palette = "Spectral")
+
+animate(fps = 4, visual4, nframes = 19)
+```
+
+## Figure 5 
+
+In the map that explores life expectancy at birth, all countries across the globe have seen increases in life expectancy. The countries with the highest life expectancy are Japan, Australia, European countries, and Canada. These countries all have the life expectancy of slightly above 80 years old. The rest of North America, most of South America, China, and the Middle East have life expectancies around the mid 70s. Russia, the rest of the Asain countries, few of the other countries in South America, and North African countries have life expectancies slightly lower than that. However, the majority of Africa has extremely low life expectancies compared to the rest of the world. While these Africa countries have seen improvements in the last 19 years in life expectancy, there numbers are still significantly lower than others. Lower life expectancy is typically caused by reduced health care and education. More specific reasons why many countries in Africa have lower life expectancy are results of disease, political instability, and enviormental factors such as drought.
+
+```{r}
+######Life expectancy at birth, total (years) - 3096 
+chloropleth.birth <- initialwrangle %>% 
+  rename('birth' = 'Life Expectancy at Birth') %>%
+  arrange(Country) %>%
+  filter(Year == 2018) %>%
+    right_join(world_map, by = c("Country"= "region"))
+visual5 <- ggplot(chloropleth.birth, aes(x=long, y=lat, group = group, #creates the plot
+                                      fill = birth)) +
+  geom_polygon() +
+  labs(fill = "Age"
+       , title = "Figure 5 - Life Expectancy at Birth"
+       , subtitle = "total number of years"
+       ) +
+  scale_fill_distiller(palette = "Spectral")
+
+animate(fps = 4, visual5, nframes = 19)
+```
+
 ## Findings
+
+Through our finding in renewable energy consumption, it is clear that the African countries have greater levels of energy consumption. It is illustrated that Asia, the Middle East, and North America have lower levels of renewable energy consumption. When looking at the changes over the years, one dramatic change is that the US is increasing its renewable energy consumption and countries in Asia are decreasing their renewable energy consumption. Moreover, Europe has been increasing their renewable energy consumption as well. 
 
 Looking at the energy usage at Amherst College inspired us to to explore other topics of sustainability in the world, and how countries differ in their sustainability. This directly lead to our interest in examining renewable energy consumption for each country on a map, by using a choropleth. Moreover, we used gganimate in order to distinguish between the change in renewable energy consumption from yearly changes. Renewable energy consumption is the proportion of energy that comes from renewable energy sources. This led us to looking at GDP as well, which stands for Gross Domestic Product. GDP is a measure for a countries economic output, as it measures a countries value of goods and services produced in their own country. Often countries with higher GDP have greater standards of living. We also look at annual based emissions of carbon dioxide, which is the amount of carbon dioxide that is released into the atmosphere. Increased emissions are often caused by burning fossil fuels and large industrialism. Another variable we looked at is life expectancy at birth which is strongly related to a country’s economic status and health care oppertunities. The final variable is access to electricity, and it is affected by a country’s economic status as well. 
 
