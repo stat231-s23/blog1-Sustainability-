@@ -15,8 +15,66 @@ knitr::opts_chunk$set(echo = FALSE)
 # Set R environment options
 options(knitr.kable.NA = '')
 
-# Load packages
+# improve digit and NA display 
+options(scipen = 1, knitr.kable.NA = '')
+
+# load packages
 library(tidyverse)
+library(broom)
+library(ggrepel)
+library(GGally)
+library(readr)
+library(maps)
+library(leaflet)
+library(sf)
+library(gapminder)
+library(ggplot2)
+library(mdsr)
+library(dplyr)
+library(gganimate)
+library(transformr)
+library(gifski)
+library(png)
+```
+
+```{r, include = FALSE}
+#read in data
+newdata <- read_csv("archive/WorldSustainabilityDataset.csv")
+```
+
+```{r, include = FALSE}
+#WRANGLE
+initialwrangle <- newdata %>%
+  rename('Renewable Energy Consumption (% of total final energy consumption)' = 'Renewable energy consumption (% of total final energy consumption) - EG.FEC.RNEW.ZS', 'Renewable Electricity Output (% of total electricity output)' = 'Renewable electricity output (% of total electricity output) - EG.ELC.RNEW.ZS', 'GDP per capita ($)' = 'GDP per capita (current US$) - NY.GDP.PCAP.CD', 'Access to Electricity (% of Pop)' = 'Access to electricity (% of population) - EG.ELC.ACCS.ZS', 'Country' = 'Country Name', 'Adjusted Savings: CO2 Damage' = 'Adjusted savings: carbon dioxide damage (% of GNI) - NY.ADJ.DCO2.GN.ZS', 'Adjusted Savings: Natural Resources Depletion' = 'Adjusted savings: natural resources depletion (% of GNI) - NY.ADJ.DRES.GN.ZS', 'Adjusted Savings: Net Forest Depletion' = 'Adjusted savings: net forest depletion (% of GNI) - NY.ADJ.DFOR.GN.ZS', 'Adjusted Savings: Particulate Emission Damage' = 'Adjusted savings: particulate emission damage (% of GNI) - NY.ADJ.DPEM.GN.ZS', 'Exports of Goods and Services' = 'Exports of goods and services (% of GDP) - NE.EXP.GNFS.ZS', 'Final Consumption Expenditure' = 'Final consumption expenditure (% of GDP) - NE.CON.TOTL.ZS', 'Imports of Goods and Services' = 'Imports of goods and services (% of GDP) - NE.IMP.GNFS.ZS', 'Inflation, Consumer Prices' = 'Inflation, consumer prices (annual %) - FP.CPI.TOTL.ZG', 'Proportion of Seats Held by Women In National Parliaments' = 'Proportion of seats held by women in national parliaments (%) - SG.GEN.PARL.ZS', 'Trade' = 'Trade (% of GDP) - NE.TRD.GNFS.ZS', 'Annual Production-Based Emissions of CO2' = 'Annual production-based emissions of carbon dioxide (CO2), measured in million tonnes', 'Income Classification' = 'Income Classification (World Bank Definition)', 'Life Expectancy at Birth' = 'Life expectancy at birth, total (years) - SP.DYN.LE00.IN', 'Total Population' = 'Population, total - SP.POP.TOTL', 'Regime Type' = 'Regime Type (RoW Measure Definition)', 'Rural Population' = 'Rural population (% of total population) - SP.RUR.TOTL.ZS', 'Total Natural Resources' = 'Total natural resources rents (% of GDP) - NY.GDP.TOTL.RT.ZS')%>%
+    mutate(Country= case_when(Country=="Antigua and Barbuda" ~ "Antigua"
+              , Country == "Bahamas, The" ~ "Bahamas"
+              , Country == "Brunei Darussalam" ~ "Brunei"
+              , Country == "Cote d'Ivoire" ~ "Cote d'Ivoire"
+              , Country == "Congo, Dem. Rep." ~ "Democratic Republic of the Congo"
+              , Country == "Congo, Rep." ~ "Republic of Congo"
+              , Country == "Cabo Verde" ~ "Cape Verde"
+              , Country == "Egypt, Arab Rep." ~ "Egypt"
+              , Country == "United Kingdom" ~ "UK"
+              , Country == "Gambia, The" ~ "Gambia"
+              , Country == "Hong Kong SAR, China" ~ "China"
+              , Country == "Iran, Islamic Rep." ~ "Iran"
+              , Country == "Kyrgyz Republic" ~ "Kyrgyzstan"
+              , Country == "Korea, Rep." ~ "South Korea"
+              , Country == "Lao PDR" ~ "Laos"
+              , Country == "St. Lucia" ~ "Saint Lucia"
+              , Country == "Macao SAR, China" ~ "China"
+              , Country == "Korea, Dem. People's Rep." ~ "North Korea"
+              , Country == "West Bank and Gaza" ~ "Palestine"
+              , Country == "Russian Federation" ~ "Russia"
+              , Country == "Slovak Republic" ~ "Slovakia"
+              , Country == "Eswatini" ~ "Swaziland"
+              , Country == "Syrian Arab Republic" ~ "Syria"
+              , Country == "Trinidad and Tobago" ~ "Trinidad"
+              , Country == "United States" ~ "USA"
+              , Country == "St. Vincent and the Grenadines" ~ "Grenadines"
+              , Country == "Venezuela, RB" ~ "Venezuela"
+              , TRUE ~ Country)) %>%
+           select('Country', 'Year', 'Access to Electricity (% of Pop)', 'Renewable Energy Consumption (% of total final energy consumption)', 'GDP per capita ($)', 'Annual Production-Based Emissions of CO2', 'Life Expectancy at Birth')
 
 ```
 
@@ -25,42 +83,84 @@ library(tidyverse)
   We all have a role to play in creating a sustainable future for ourselves and for generations to come. One of the most pressing issues we face today is the high level of energy consumption and the resulting impact on the environment. In 2021, the United States alone consumed a staggering 3,930 terawatt hours of energy, with a significant portion of it coming from non-renewable sources like fossil fuels. This has a detrimental effect on the environment, contributing to climate change, air and water pollution, and other environmental issues. Melting glaciers are threatening to flood our valuable land and cities. An estimated 15 million people around the world are at risk of suffering sudden, deadly, and destructive flooding events due to the warming climate. By caring about sustainability and making conscious choices about energy use, we can help to reduce our carbon footprint and create a more sustainable future.
   
   At Amherst College, we have a responsibility to reduce our energy consumption and minimize our environmental impact. By reducing energy consumption, we can save money and preserve resources for future generations. In our analysis, we look at sustainability within a few freshman dorms at Amherst College. We then look at data across the world and compare energy consumption country-to-country. Our goal is to bring attention to just how much energy is consumed and consequently allow readers to analyze their own carbon footprints.
+  
 
 
-## Website publication work flow
-
-1. Edit Rmd
-
-2. Knit to HTML to view progress. You may need to click "Open in Browser" for some content to show (sometimes content won't show until you actually push your changes to GitHub and view the published website).
-
-3. Commit and push changes when you are ready. The website may take a couple minutes to update automatically after the push, but you may need to clear your browser's cache or view the page in a private/incognito window to see the changes more quickly. 
-
-
-# Content
-
-You can include text, `code`, and output as usual. Remember to take full advantage of Markdown and follow our [Style Guide](https://acstat231-f22.github.io/home/style-guide.html#Text_narration).
-
-```{r ggplot-example, fig.align="left", out.width="100%"}
-ggplot(data = cars, aes(x = speed, y = dist)) + 
-  geom_point() + 
-  labs(x = "Speed of car (mph)",
-       y = "Distance taken to stop (ft)",
-       title = "Stopping distance increases with faster speeds",
-       subtitle = "Based on 1920s study") +
-  theme_classic()
+```{r, fig.cap='"Safe Space" by artist Kenesha Sneed', out.width="80%", fig.align="center"}
+knitr::include_graphics("img/image1.PNG")
 ```
 
-Examples and additional guidance are provided below. 
+## Why should anyone care about this?
 
-Take note of the the default code chunk options in the `setup` code chunk. For example, unlike the rest of the Rmd files we worked in this semester, the default code chunk option is `echo = FALSE`, so you will need to set `echo  = TRUE` for any code chunks you would like to display in the blog. You should be thoughtful and intentional about the code you choose to display. 
+The easy thing to do is to go about your life and pretend nothing is happening. Ignorance is bliss, right? If everyone reading this thought this way, our sustainability habits would worsen. Caring about sustainability and taking action to address climate change is not only important, it is absolutely crucial for the survival of our planet and all the living beings that call it home. Ignoring climate change and continuing with unsustainable practices not only harms the environment but also has serious social and economic consequences. We are already witnessing the devastating effects of climate change, including rising sea levels, more frequent and severe natural disasters, and the displacement of vulnerable populations. We cannot continue to turn a blind eye to these issues and expect things to get better on their own. It is our responsibility to take action and make the necessary changes in our daily lives, as well as advocate for systemic changes at a larger scale. By prioritizing sustainability and addressing climate change, we can create a better future for ourselves and for future generations.
 
+## Data Collection
+
+The data from our Shiny App came from the Amherst College Office of Sustainability. As technology advances, the Sustainability Office has more access to resources that allow us to track energy consumption. In the newer dorms, the office is even able to track water usage. This data is not publicly available. As Amherst College students, we were able to meet with Weston Dripps, the Director of Sustainability. He kindly pulled the energy consumption data from North, South, James, and Stearns during the 2021-22 academic year. The original data is in an Excel file. 
+
+The worldwide data comes from Kaggle, a trusted web browser that gives users access to large, downloadable datasets. This dataset titled, “World Sustainability Dataset” tracks the sustainability of 173 countries over 19 years. We have data on the years 2000-2018. Below is a link to the original dataset. 
+
+
+
+# Content {.tabset}
+
+The figure below shows World GDP over time. 
+```{r}
+#####GDP
+world_map <- map_data(map="world")
+
+chloropleth.gdp <- initialwrangle %>% 
+  rename('gdp' = 'GDP per capita ($)') %>%
+  arrange(Country) %>%
+  #filter(Year == 2018) %>%
+  right_join(world_map, by = c("Country"= "region"))
+
+
+visual1 <- ggplot(chloropleth.gdp, aes(x=long, y=lat, group = group, #creates the plot
+                                      fill = gdp)) +
+  geom_polygon() +
+   transition_time(Year) +
+  labs(fill = "GDP ($) "
+       , title = 'Figure 1 - World GDP in: {frame_time}'
+       , caption = "Note: some countries are missing GDP data") +
+  scale_fill_distiller(palette = "Spectral")
+
+animate(fps = 4, visual1, nframes = 19)
+```
+
+```{r}
+######Energy Consumption
+chloropleth.renew <- initialwrangle %>% 
+  rename('renew' = 'Renewable Energy Consumption (% of total final energy consumption)') %>%
+  arrange(Country) %>%
+  #filter(Year == 2018) %>%
+  right_join(world_map, by = c("Country"= "region"))
+
+visual2 <- ggplot(chloropleth.renew, aes(x=long, y=lat, group = group, #creates the plot
+                                      fill = renew)) +
+  geom_polygon() +
+  transition_time(Year) +
+  labs(fill = "Renewable 
+  Energy Consumption"
+       , title = 'Figure 2 - World Renewable Energy Consumption 
+  (% of total final energy consumption) in: {frame_time}'
+       ) +
+  scale_fill_distiller(palette = "Spectral")
+
+animate(fps = 4, visual2, nframes = 19)
+```
+
+## Findings
+
+Looking at the energy usage at Amherst College inspired us to to explore other topics of sustainability in the world, and how countries differ in their sustainability. This directly lead to our interest in examining renewable energy consumption for each country on a map, by using a choropleth. Moreover, we used gganimate in order to distinguish between the change in renewable energy consumption from yearly changes. Renewable energy consumption is the proportion of energy that comes from renewable energy sources. This led us to looking at GDP as well, which stands for Gross Domestic Product. GDP is a measure for a countries economic output, as it measures a countries value of goods and services produced in their own country. Often countries with higher GDP have greater standards of living. We also look at annual based emissions of carbon dioxide, which is the amount of carbon dioxide that is released into the atmosphere. Increased emissions are often caused by burning fossil fuels and large industrialism. Another variable we looked at is life expectancy at birth which is strongly related to a country’s economic status and health care oppertunities. The final variable is access to electricity, and it is affected by a country’s economic status as well. 
 
 ## Links 
 
-Here is the link to our Shiny App on Sustainability of Amherst College Dorms:
+Clicking on the link below will take you to our Shiny App. Here, we have used actual energy consumption data from the Office of Sustainability at Amherst College to measure energy consumption during the 2021-2022 academic year. In the first plot, which is a line chart, we looked at a time series where we tracked the average day of energy consumption in each dorm. The energy consumption was measured in 5 minutes increments and in Kilowatts Per Hour (kw/h). In the app, the user is able to select which freshman dorm they desire to inspect, and whether they want to measure the energy consumption in total energy every 5 minutes or energy usage per capita. In the following section of the app, seasonal energy usage shows the seasonal differences in energy consumption for each dorm from the use of bar charts. In this panel of the Shiny app, you can select which season you would like to view as well as whether you want the data to be presented in total energy per 5 minutes or in energy per capita. The last feature of the shiny app displays energy usage per day type. This allows you to select energy use for any day of the week, as well are giving one the ability to plot either weekdays or weekends. This is shown through bar graphs are well. 
 
 [Shiny App](https://hankim25.shinyapps.io/shiny1-sustainability/) 
 
+Link to the Sustainability Dataset: https://www.kaggle.com/datasets/truecue/worldsustainabilitydataset/code?resource=download 
 
 ## Visualizations 
 
@@ -75,13 +175,11 @@ If you want to include dynamic visualizations or tables, you should explore your
 * [**sparkline**](https://github.com/htmlwidgets/sparkline): Small inline charts
 * [**threejs**](https://github.com/bwlewis/rthreejs): Interactive 3D graphics
     
-You may embed a published Shiny app in your blog if useful, but be aware that there is a limited window size for embedded objects, which tends to makes the user experience of the app worse relative to a dedicated Shiny app page. Additionally, Shiny apps will go idle after a few minutes and have to be reloaded by the user, which may also affect the user experience. 
 
-Any Shiny apps embedded in your blog should be accompanied by the link to the published Shiny app (I did this using a figure caption in the code chunk below, but you don't have to incorporate the link in this way).
 
-```{r ds-salaries-app, out.width = "100%", out.extra = 'data-external="1" frameborder="no"', fig.cap = "[Data Science Salaries Shiny App](https://hankim25.shinyapps.io/shiny1-sustainability/)"}
+```{r ds-salaries-app, out.width = "300%", out.extra = 'data-external="1" frameborder="no"', fig.cap = "[Sustainability Shiny App](https://hankim25.shinyapps.io/shiny1-sustainability/)"}
 knitr::include_app("https://hankim25.shinyapps.io/shiny1-sustainability/",
-                   height = "500px")
+                   height = "1000px")
 ```
 
 
@@ -143,13 +241,19 @@ Either way, the file path can be a local path within your project directory or a
 
 
 
-# Formatting
+# Limitations & Conclusions
 
-## Tabbed subsections {.tabset}
+## Limitations {.tabset}
 
-Each subsection below the "Tabbed subsections" section heading will appear in a tab. See R Markdown Cookbook [Section 7.6: Put content in tabs](https://bookdown.org/yihui/rmarkdown-cookbook/html-tabs.html) for additional customization options. 
+There were a few limitations of our work. First, as with most large datasets, there was some missing data. We had to pick and chose certain variables that had the most data. By dropping the na’s, we inevitably lose the ability to broaden the scope of our analysis. With the world sustainability dataset, the data was collected from 173 different countries over 19 years. This is a huge amount of data with large variability so we need to be careful. Due to the varying economic status of each country, it’s hard to gather information for all variables. We proceeded with caution in our analysis. 
 
-### Bulleted list
+As for our Shiny app, we only had data from four out of the 34 residence halls at Amherst College. These four dorms are freshman dorms so we shouldn’t conclude that our findings represent the energy consumption for the Amherst College student body as a whole.
+
+
+## Conclusions
+
+We hope through this blog post that readers are aware of the importance of sustainability in the long run. As Earth gets warmer by the day, everyone can do their part to reduce their carbon footprint. Sustainability is crucial for the health of our planet and the well-being of future generations. By making small changes in our daily lives, we can all do our part to reduce our carbon footprint and live more sustainably. Whether it's by using reusable bags, reducing energy consumption, supporting sustainable businesses, or choosing eco-friendly products, every action counts. It's important to remember that we are all responsible for the impact we have on the environment, and by taking steps toward sustainability, we can make a significant difference.
+
 
 You can make a bulleted list like this:
 
@@ -250,14 +354,6 @@ Further customization requires adding a CSS style file or code chunk or incorpor
 
 # References
 
-You can list R package citations with the code `citation("packageName")` in the console and then copy (and reformat as needed) the relevant text, e.g.,
-```{r}
-citation("png")
-```
-
-The following citations are based on the American Statistical Association citation style (not all of these references are used in this document).:
-
-
 <!-- Textbook -->
 1. Baumer, B. S., Kaplan, D. T., and Horton, N. J. (2021), *Modern Data Science with R* (2nd ed.), Boca Raton, FL: CRC Press.
 
@@ -277,60 +373,75 @@ The following citations are based on the American Statistical Association citati
   Vaughan D, Wilke C, Woo K, Yutani H (2019). “Welcome to the tidyverse.”
   _Journal of Open Source Software_, *4*(43), 1686.
   doi:10.21105/joss.01686 <https://doi.org/10.21105/joss.01686>. 
-  
+
+<!-- R package -->
 6. Robinson D, Hayes A, Couch S (2023). _broom: Convert Statistical Objects
   into Tidy Tibbles_. R package version 1.0.3,
   <https://CRAN.R-project.org/package=broom>.
   
+<!-- R package -->
 7. Slowikowski K (2023). _ggrepel: Automatically Position Non-Overlapping
   Text Labels with 'ggplot2'_. R package version 0.9.3,
   <https://CRAN.R-project.org/package=ggrepel>.
 
+<!-- R package -->
 8. Schloerke B, Cook D, Larmarange J, Briatte F, Marbach M, Thoen E, Elberg
   A, Crowley J (2021). _GGally: Extension to 'ggplot2'_. R package version
   2.1.2, <https://CRAN.R-project.org/package=GGally>.
   
+<!-- R package -->  
 9. Wickham H, Hester J, Bryan J (2022). _readr: Read Rectangular Text
   Data_. R package version 2.1.3,
   <https://CRAN.R-project.org/package=readr>.
   
+<!-- R package -->  
 10. Becker OScbRA, Minka ARWRvbRBEbTP, Deckmyn. A (2022). _maps: Draw
   Geographical Maps_. R package version 3.4.1,
   <https://CRAN.R-project.org/package=maps>.
   
+<!-- R package --> 
 11. Cheng J, Karambelkar B, Xie Y (2023). _leaflet: Create Interactive Web
   Maps with the JavaScript 'Leaflet' Library_. R package version 2.1.2,
   <https://CRAN.R-project.org/package=leaflet>.
   
+<!-- R package -->  
 12. Pebesma, E., 2018. Simple Features for R: Standardized Support for
   Spatial Vector Data. The R Journal 10 (1), 439-446,
   https://doi.org/10.32614/RJ-2018-009 
   
+<!-- R package -->  
 13. Bryan J (2023). _gapminder: Data from Gapminder_. R package version
   1.0.0, <https://CRAN.R-project.org/package=gapminder>.
   
+<!-- R package -->  
 14. H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag
   New York, 2016.
-
+  
+<!-- R package -->
 15. Benjamin S. Baumer, Daniel T. Kaplan, Nicholas J. Horton (2021). Modern
   Data Science with R. 2nd edition, Chapman and Hall/CRC Press: Boca
   Raton, 1--673. URL
   https://www.routledge.com/Modern-Data-Science-with-R/Baumer-Kaplan-Horton/p/book/9780367191498.
-
+  
+<!-- R package -->
 16. Wickham H, François R, Henry L, Müller K, Vaughan D (2023). _dplyr: A
   Grammar of Data Manipulation_. R package version 1.1.0,
   <https://CRAN.R-project.org/package=dplyr>.
   
+<!-- R package --> 
 17. Pedersen T, Robinson D (2022). _gganimate: A Grammar of Animated
   Graphics_. R package version 1.0.8,
   <https://CRAN.R-project.org/package=gganimate>.
-
+  
+<!-- R package -->
 18. Pedersen T (2022). _transformr: Polygon and Path Transformations_. R
   package version 0.1.4, <https://CRAN.R-project.org/package=transformr>.
-
+  
+<!-- R package -->
 19. Ooms J (2022). _gifski: Highest Quality GIF Encoder_. R package version
   1.6.6-1, <https://CRAN.R-project.org/package=gifski>.
-
+  
+<!-- R package -->
 20. Urbanek S (2022). _png: Read and write PNG images_. R package version
   0.1-8, <https://CRAN.R-project.org/package=png>.
 
