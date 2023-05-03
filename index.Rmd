@@ -105,7 +105,62 @@ The data from our Shiny App came from the Amherst College Office of Sustainabili
 The worldwide data comes from Kaggle, a trusted web browser that gives users access to large, downloadable datasets. This dataset titled, “World Sustainability Dataset” tracks the sustainability of 173 countries over 19 years. We have data on the years 2000-2018. Below is a link to the original dataset. 
 
 
+## Visualizations 
+
+Visualizations, particularly interactive ones, will be well-received. That said, do not overuse visualizations. You may be better off with one complicated but well-crafted visualization as opposed to many quick-and-dirty plots. Any plots should be well-thought-out, properly labeled, informative, and visually appealing.
+
+If you want to include dynamic visualizations or tables, you should explore your options from packages that are built from [**htmlwidgets**](https://www.htmlwidgets.org/showcase_leaflet.html). These **htmlwidgets**-based packages offer ways to build lighterweight, dynamic visualizations or tables that don't require an R server to run! A more complete list of packages is available on the linked website, but a short list includes:
+
+* [**plotly**](https://plot.ly/r/): Interactive graphics with D3
+* [**leaflet**](https://rstudio.github.io/leaflet/): Interactive maps with OpenStreetMap
+* [**dygraphs**](http://rstudio.github.io/dygraphs): Interactive time series visualization
+* [**visNetwork**](http://dataknowledge.github.io/visNetwork): Network graph visualization vis.js
+* [**sparkline**](https://github.com/htmlwidgets/sparkline): Small inline charts
+* [**threejs**](https://github.com/bwlewis/rthreejs): Interactive 3D graphics
+    
+
+
+```{r ds-salaries-app, out.width = "300%", out.extra = 'data-external="1" frameborder="no"', fig.cap = "[Sustainability Shiny App](https://hankim25.shinyapps.io/shiny1-sustainability/)"}
+knitr::include_app("https://hankim25.shinyapps.io/shiny1-sustainability/",
+                   height = "1000px")
+```
+
+
+## Tables
+
+### **DT** package
+
+The [**DT** package](https://rstudio.github.io/DT/) is great for making dynamic tables that can be displayed, searched, and filtered by the user without needing an R server or Shiny app!
+
+Note: you should load any packages you use in the `setup` code chunk as usual. The `library()` functions are shown below just for demonstration.
+
+```{r dt-example, message=FALSE, echo=TRUE}
+library(DT)
+mtcars %>% 
+  select(mpg, cyl, hp) %>% 
+  datatable(colnames = c("MPG", "Number of cylinders", "Horsepower"),
+            filter = 'top',
+            options = list(pageLength = 10, autoWidth = TRUE))
+```
+
+### **kableExtra** package
+
+You can also use [**kableExtra**](https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html) for customizing HTML tables.
+
+```{r kable-example, echo=TRUE, message=FALSE}
+library(kableExtra)
+summary(cars) %>%
+  kbl(col.names = c("Speed", "Distance"),
+      row.names = FALSE) %>%
+  kable_styling(bootstrap_options = "striped",
+                full_width = FALSE) %>%
+  row_spec(0, bold = TRUE) %>%
+  column_spec(1:2, width = "1.5in") 
+```
+
+
 # Content
+
 
 ## Figure 1 
 
@@ -173,31 +228,33 @@ chloropleth.co2_emit <- initialwrangle %>%
 visual3 <- ggplot(chloropleth.co2_emit, aes(x=long, y=lat, group = group, #creates the plot
                                       fill = co2_emit)) +
   geom_polygon() +
+  transition_time(Year) +
   labs(fill = "CO2 Emissions"
-       , title = "Figure 3 - Annual Production-Based Emissions of Carbon Dioxide (CO2)"
+       , title = 'Figure 3 - Annual Production-Based Emissions of Carbon Dioxide (CO2) in : {frame_time}'
        , subtitle = "measured in million tonnes"
        ) +
   scale_fill_distiller(palette = "Spectral")
 
 animate(fps = 4, visual3, nframes = 19)
+
 ```
 
 ## Figure 4
 
 The next map, presents the percentage of a country’s population with electricity access. Here, it is evident that mainly every continent besides Africa has access to electricity. There are a few exceptions however; Mongolia, India, and the north western countries in South America have slightly lower than 100% of the population with electricity access. However, during the 19 years presented in the graph, all of these countries have increased their electricity access. The continent of Africa, despite the northern of Africa, have extremely low energy access. There has been slight improvements in increase the access of electricity, but over the span of 19 years there really hasn’t been any significant changes. This lack of electricity is an extreme issue, which is a detriment to the daily lives of those who live there. Electricity is vital for healthcare, education, and communication. Moreover, this can lead to lower economic growth and fewer job opportunities. Less electricity can play a direct role on the sustainability of the environment. First, those without electricity create energy by burning biomass, often resulting in air pollution, deforestation and many other climate problems. 
 
-```{r, out.width="50%"}
+```{r}
 #####Access to Electricity (% of population) 
 chloropleth.electricity <- initialwrangle %>% 
   rename('electricity' = 'Access to Electricity (% of Pop)') %>%
   arrange(Country) %>%
-  filter(Year == 2018) %>%
     right_join(world_map, by = c("Country"= "region"))
 visual4 <- ggplot(chloropleth.electricity, aes(x=long, y=lat, group = group, #creates the plot
                                       fill = electricity)) +
   geom_polygon() +
-  labs(fill = "% or Population w/ \n Access to Electricity"
-       , title = "Figure 4 - Access to Electricity"
+  transition_time(Year) +
+  labs(fill = "% of Population w/ \n Access to Electricity"
+       , title = 'Figure 4 - Access to Electricity in: {frame_time}'
        , subtitle = "% of population"
        ) +
   scale_fill_distiller(palette = "Spectral")
@@ -214,25 +271,19 @@ In the map that explores life expectancy at birth, all countries across the glob
 chloropleth.birth <- initialwrangle %>% 
   rename('birth' = 'Life Expectancy at Birth') %>%
   arrange(Country) %>%
-  filter(Year == 2018) %>%
     right_join(world_map, by = c("Country"= "region"))
 visual5 <- ggplot(chloropleth.birth, aes(x=long, y=lat, group = group, #creates the plot
                                       fill = birth)) +
   geom_polygon() +
+  transition_time(Year) +
   labs(fill = "Age"
-       , title = "Figure 5 - Life Expectancy at Birth"
+       , title = 'Figure 5 - Life Expectancy at Birth in: {frame_time}'
        , subtitle = "total number of years"
        ) +
   scale_fill_distiller(palette = "Spectral")
 
 animate(fps = 4, visual5, nframes = 19)
 ```
-
-## Findings
-
-Through our finding in renewable energy consumption, it is clear that the African countries have greater levels of energy consumption. It is illustrated that Asia, the Middle East, and North America have lower levels of renewable energy consumption. When looking at the changes over the years, one dramatic change is that the US is increasing its renewable energy consumption and countries in Asia are decreasing their renewable energy consumption. Moreover, Europe has been increasing their renewable energy consumption as well. 
-
-Looking at the energy usage at Amherst College inspired us to to explore other topics of sustainability in the world, and how countries differ in their sustainability. This directly lead to our interest in examining renewable energy consumption for each country on a map, by using a choropleth. Moreover, we used gganimate in order to distinguish between the change in renewable energy consumption from yearly changes. Renewable energy consumption is the proportion of energy that comes from renewable energy sources. This led us to looking at GDP as well, which stands for Gross Domestic Product. GDP is a measure for a countries economic output, as it measures a countries value of goods and services produced in their own country. Often countries with higher GDP have greater standards of living. We also look at annual based emissions of carbon dioxide, which is the amount of carbon dioxide that is released into the atmosphere. Increased emissions are often caused by burning fossil fuels and large industrialism. Another variable we looked at is life expectancy at birth which is strongly related to a country’s economic status and health care oppertunities. The final variable is access to electricity, and it is affected by a country’s economic status as well. 
 
 ## Links 
 
@@ -242,79 +293,11 @@ Clicking on the link below will take you to our Shiny App. Here, we have used ac
 
 Link to the Sustainability Dataset: https://www.kaggle.com/datasets/truecue/worldsustainabilitydataset/code?resource=download 
 
-## Visualizations 
+## Findings
 
-Visualizations, particularly interactive ones, will be well-received. That said, do not overuse visualizations. You may be better off with one complicated but well-crafted visualization as opposed to many quick-and-dirty plots. Any plots should be well-thought-out, properly labeled, informative, and visually appealing.
+Through our finding in renewable energy consumption, it is clear that the African countries have greater levels of energy consumption. It is illustrated that Asia, the Middle East, and North America have lower levels of renewable energy consumption. When looking at the changes over the years, one dramatic change is that the US is increasing its renewable energy consumption and countries in Asia are decreasing their renewable energy consumption. Moreover, Europe has been increasing their renewable energy consumption as well. 
 
-If you want to include dynamic visualizations or tables, you should explore your options from packages that are built from [**htmlwidgets**](https://www.htmlwidgets.org/showcase_leaflet.html). These **htmlwidgets**-based packages offer ways to build lighterweight, dynamic visualizations or tables that don't require an R server to run! A more complete list of packages is available on the linked website, but a short list includes:
-
-* [**plotly**](https://plot.ly/r/): Interactive graphics with D3
-* [**leaflet**](https://rstudio.github.io/leaflet/): Interactive maps with OpenStreetMap
-* [**dygraphs**](http://rstudio.github.io/dygraphs): Interactive time series visualization
-* [**visNetwork**](http://dataknowledge.github.io/visNetwork): Network graph visualization vis.js
-* [**sparkline**](https://github.com/htmlwidgets/sparkline): Small inline charts
-* [**threejs**](https://github.com/bwlewis/rthreejs): Interactive 3D graphics
-    
-
-
-```{r ds-salaries-app, out.width = "300%", out.extra = 'data-external="1" frameborder="no"', fig.cap = "[Sustainability Shiny App](https://hankim25.shinyapps.io/shiny1-sustainability/)"}
-knitr::include_app("https://hankim25.shinyapps.io/shiny1-sustainability/",
-                   height = "1000px")
-```
-
-
-## Tables
-
-### **DT** package
-
-The [**DT** package](https://rstudio.github.io/DT/) is great for making dynamic tables that can be displayed, searched, and filtered by the user without needing an R server or Shiny app!
-
-Note: you should load any packages you use in the `setup` code chunk as usual. The `library()` functions are shown below just for demonstration.
-
-```{r dt-example, message=FALSE, echo=TRUE}
-library(DT)
-mtcars %>% 
-  select(mpg, cyl, hp) %>% 
-  datatable(colnames = c("MPG", "Number of cylinders", "Horsepower"),
-            filter = 'top',
-            options = list(pageLength = 10, autoWidth = TRUE))
-```
-
-### **kableExtra** package
-
-You can also use [**kableExtra**](https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html) for customizing HTML tables.
-
-```{r kable-example, echo=TRUE, message=FALSE}
-library(kableExtra)
-summary(cars) %>%
-  kbl(col.names = c("Speed", "Distance"),
-      row.names = FALSE) %>%
-  kable_styling(bootstrap_options = "striped",
-                full_width = FALSE) %>%
-  row_spec(0, bold = TRUE) %>%
-  column_spec(1:2, width = "1.5in") 
-```
-
-
-## Images
-
-Images and gifs can be displayed using code chunks:
-
-```{r, fig.cap='"Safe Space" by artist Kenesha Sneed', out.width="80%", fig.align="center"}
-knitr::include_graphics("img/Kenesha-Sneed_safe-space.jpeg")
-```
-
-
-```{r, fig.cap="This is a figure caption", out.width="50%", fig.align="center"}
-knitr::include_graphics("https://media.giphy.com/media/H7ZrrA9V2pd3Tehdds/giphy.gif")
-```
-
-You may also use Markdown syntax for displaying images as shown below, but code chunks offer easier customization of the image size and alignment.
-
-![This is another figure caption](https://media.giphy.com/media/8i5IvxP9ZLgmjXN1BF/giphy.gif)
-
-Either way, the file path can be a local path within your project directory or a URL for an image hosted online. This syntax works for PNG, PDF, JPG, and even GIF formats.
-
+Looking at the energy usage at Amherst College inspired us to to explore other topics of sustainability in the world, and how countries differ in their sustainability. This directly lead to our interest in examining renewable energy consumption for each country on a map, by using a choropleth. Moreover, we used gganimate in order to distinguish between the change in renewable energy consumption from yearly changes. Renewable energy consumption is the proportion of energy that comes from renewable energy sources. This led us to looking at GDP as well, which stands for Gross Domestic Product. GDP is a measure for a countries economic output, as it measures a countries value of goods and services produced in their own country. Often countries with higher GDP have greater standards of living. We also look at annual based emissions of carbon dioxide, which is the amount of carbon dioxide that is released into the atmosphere. Increased emissions are often caused by burning fossil fuels and large industrialism. Another variable we looked at is life expectancy at birth which is strongly related to a country’s economic status and health care oppertunities. The final variable is access to electricity, and it is affected by a country’s economic status as well. 
 
 
 
@@ -333,24 +316,6 @@ As for our Shiny app, we only had data from four out of the 34 residence halls a
 ## Conclusions
 
 We hope through this blog post that readers are aware of the importance of sustainability in the long run. As Earth gets warmer by the day, everyone can do their part to reduce their carbon footprint. Sustainability is crucial for the health of our planet and the well-being of future generations. By making small changes in our daily lives, we can all do our part to reduce our carbon footprint and live more sustainably. Whether it's by using reusable bags, reducing energy consumption, supporting sustainable businesses, or choosing eco-friendly products, every action counts. It's important to remember that we are all responsible for the impact we have on the environment, and by taking steps toward sustainability, we can make a significant difference.
-
-
-You can make a bulleted list like this:
-
-* item 1
-* item 2
-* item 3
-
-
-### Numbered list
-
-
-You can make a numbered list like this
-
-1. First thing I want to say
-2. Second thing I want to say
-3. Third thing I want to say
-
 
 
 ## How to Increase Sustainability
