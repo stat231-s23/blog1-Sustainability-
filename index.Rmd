@@ -105,67 +105,21 @@ The data from our Shiny App came from the Amherst College Office of Sustainabili
 The worldwide data comes from Kaggle, a trusted web browser that gives users access to large, downloadable datasets. This dataset titled, “World Sustainability Dataset” tracks the sustainability of 173 countries over 19 years. We have data on the years 2000-2018. Below is a link to the original dataset. 
 
 
-## Visualizations 
-
-Visualizations, particularly interactive ones, will be well-received. That said, do not overuse visualizations. You may be better off with one complicated but well-crafted visualization as opposed to many quick-and-dirty plots. Any plots should be well-thought-out, properly labeled, informative, and visually appealing.
-
-If you want to include dynamic visualizations or tables, you should explore your options from packages that are built from [**htmlwidgets**](https://www.htmlwidgets.org/showcase_leaflet.html). These **htmlwidgets**-based packages offer ways to build lighterweight, dynamic visualizations or tables that don't require an R server to run! A more complete list of packages is available on the linked website, but a short list includes:
-
-* [**plotly**](https://plot.ly/r/): Interactive graphics with D3
-* [**leaflet**](https://rstudio.github.io/leaflet/): Interactive maps with OpenStreetMap
-* [**dygraphs**](http://rstudio.github.io/dygraphs): Interactive time series visualization
-* [**visNetwork**](http://dataknowledge.github.io/visNetwork): Network graph visualization vis.js
-* [**sparkline**](https://github.com/htmlwidgets/sparkline): Small inline charts
-* [**threejs**](https://github.com/bwlewis/rthreejs): Interactive 3D graphics
-    
-
-
-```{r ds-salaries-app, out.width = "300%", out.extra = 'data-external="1" frameborder="no"', fig.cap = "[Sustainability Shiny App](https://hankim25.shinyapps.io/shiny1-sustainability/)"}
+```{r ds-salaries-app, out.width = "200%", out.extra = 'data-external="1" frameborder="no"', fig.cap = "[Sustainability Shiny App](https://hankim25.shinyapps.io/shiny1-sustainability/)"}
 knitr::include_app("https://hankim25.shinyapps.io/shiny1-sustainability/",
                    height = "1000px")
 ```
 
 
-## Tables
 
-### **DT** package
-
-The [**DT** package](https://rstudio.github.io/DT/) is great for making dynamic tables that can be displayed, searched, and filtered by the user without needing an R server or Shiny app!
-
-Note: you should load any packages you use in the `setup` code chunk as usual. The `library()` functions are shown below just for demonstration.
-
-```{r dt-example, message=FALSE, echo=TRUE}
-library(DT)
-mtcars %>% 
-  select(mpg, cyl, hp) %>% 
-  datatable(colnames = c("MPG", "Number of cylinders", "Horsepower"),
-            filter = 'top',
-            options = list(pageLength = 10, autoWidth = TRUE))
-```
-
-### **kableExtra** package
-
-You can also use [**kableExtra**](https://cran.r-project.org/web/packages/kableExtra/vignettes/awesome_table_in_html.html) for customizing HTML tables.
-
-```{r kable-example, echo=TRUE, message=FALSE}
-library(kableExtra)
-summary(cars) %>%
-  kbl(col.names = c("Speed", "Distance"),
-      row.names = FALSE) %>%
-  kable_styling(bootstrap_options = "striped",
-                full_width = FALSE) %>%
-  row_spec(0, bold = TRUE) %>%
-  column_spec(1:2, width = "1.5in") 
-```
+# Content {.tabset}
 
 
-# Content
-
-
-## Figure 1 
+## Figure 1 {.tabset}
 
 It is clear that the US, Canada, Australia and and Europe have the highest GDP. Moreover, it appears that the highest GDP comes from the Scandinivian countries. For the other countries, their GDP was really low in the early 2000s but many of these countries has seen rise in their GDP. The US, Canada, Australia, and Europe have also seen dramatic growth in their GDP. Africa stands out in particular, as starting with extremely low GDP and really not increasing it in the span of 19 years. Some reasons why GDP might be low is because there might be a lack of recourses as a result of a countries location, climate, and political stability. Moreover, a country with poor infastructure might lead to lower GDP because it makes it difficult to transfer and move the goods. Finally, a country’s technological status and education is key for GDP growth because they help develop new ideas, goods, and products.
-```{r}
+
+```{r, fig.width=7}
 #####GDP
 world_map <- map_data(map="world")
 
@@ -188,11 +142,11 @@ visual1 <- ggplot(chloropleth.gdp, aes(x=long, y=lat, group = group, #creates th
 animate(fps = 4, visual1, nframes = 19)
 ```
 
-## Figure 2
+## Figure 2 {.tabset}
 
 Through our finding in renewable energy consumption, it is clear that the African countries have greater levels of energy consumption. It is illustrated that Asia, the Middle East, and North America have lower levels of renewable energy consumption. When looking at the changes over the years, one dramatic change is that the US is increasing its renewable energy consumption and countries in Asia are decreasing their renewable energy consumption. Moreover, Europe has been increasing their renewable energy consumption as well. 
 
-```{r}
+```{r, fig.width=7}
 ######Energy Consumption
 chloropleth.renew <- initialwrangle %>% 
   rename('renew' = 'Renewable Energy Consumption (% of total final energy consumption)') %>%
@@ -214,11 +168,11 @@ visual2 <- ggplot(chloropleth.renew, aes(x=long, y=lat, group = group, #creates 
 animate(fps = 4, visual2, nframes = 19)
 ```
 
-## Figure 3
+## Figure 3 {.tabset}
 
 For annual production based emissions of carbon dioxide, it is illustrated that the countries with the greatest levels of carbon dioxide emissions are the United States, Russia, China, and India. However, over the span of the 19 years Russia has not changes at all. Another change is that the United States has reduced their carbon emissions in the span of the 19 year. China and India have moved in opposite directions, as they have increased their carbon dioxide emissions in the 19 year span. Another country that has increased their carbon dioxide emissions is Brazil. The most noticeable change on the map is the extreme amount of carbon emissions that China increases in. In the early 2000s China’s emissions were less than the United States, and at the end of the 19 year period the country pretty much doubles their emissions are the country changed to the color red on the map. Therefore, one could make the conclusion that the US is headed in the right direction of improving their approach to sustainability and countries like China, India, and Brazil are headed in the opposite direction.
 
-```{r}
+```{r, fig.width=7}
 ######Annual Production-Based Emissions of Carbon Dioxide (CO2), measured in million tonnes
 chloropleth.co2_emit <- initialwrangle %>% 
   rename('co2_emit' = 'Annual Production-Based Emissions of CO2') %>%
@@ -239,11 +193,11 @@ animate(fps = 4, visual3, nframes = 19)
 
 ```
 
-## Figure 4
+## Figure 4 {.tabset}
 
 The next map, presents the percentage of a country’s population with electricity access. Here, it is evident that mainly every continent besides Africa has access to electricity. There are a few exceptions however; Mongolia, India, and the north western countries in South America have slightly lower than 100% of the population with electricity access. However, during the 19 years presented in the graph, all of these countries have increased their electricity access. The continent of Africa, despite the northern of Africa, have extremely low energy access. There has been slight improvements in increase the access of electricity, but over the span of 19 years there really hasn’t been any significant changes. This lack of electricity is an extreme issue, which is a detriment to the daily lives of those who live there. Electricity is vital for healthcare, education, and communication. Moreover, this can lead to lower economic growth and fewer job opportunities. Less electricity can play a direct role on the sustainability of the environment. First, those without electricity create energy by burning biomass, often resulting in air pollution, deforestation and many other climate problems. 
 
-```{r}
+```{r, fig.width=7}
 #####Access to Electricity (% of population) 
 chloropleth.electricity <- initialwrangle %>% 
   rename('electricity' = 'Access to Electricity (% of Pop)') %>%
@@ -262,11 +216,11 @@ visual4 <- ggplot(chloropleth.electricity, aes(x=long, y=lat, group = group, #cr
 animate(fps = 4, visual4, nframes = 19)
 ```
 
-## Figure 5 
+## Figure 5 {.tabset}
 
 In the map that explores life expectancy at birth, all countries across the globe have seen increases in life expectancy. The countries with the highest life expectancy are Japan, Australia, European countries, and Canada. These countries all have the life expectancy of slightly above 80 years old. The rest of North America, most of South America, China, and the Middle East have life expectancies around the mid 70s. Russia, the rest of the Asain countries, few of the other countries in South America, and North African countries have life expectancies slightly lower than that. However, the majority of Africa has extremely low life expectancies compared to the rest of the world. While these Africa countries have seen improvements in the last 19 years in life expectancy, there numbers are still significantly lower than others. Lower life expectancy is typically caused by reduced health care and education. More specific reasons why many countries in Africa have lower life expectancy are results of disease, political instability, and enviormental factors such as drought.
 
-```{r}
+```{r, fig.width=7}
 ######Life expectancy at birth, total (years) - 3096 
 chloropleth.birth <- initialwrangle %>% 
   rename('birth' = 'Life Expectancy at Birth') %>%
@@ -285,7 +239,7 @@ visual5 <- ggplot(chloropleth.birth, aes(x=long, y=lat, group = group, #creates 
 animate(fps = 4, visual5, nframes = 19)
 ```
 
-## Links 
+## Links {.tabset}
 
 Clicking on the link below will take you to our Shiny App. Here, we have used actual energy consumption data from the Office of Sustainability at Amherst College to measure energy consumption during the 2021-2022 academic year. In the first plot, which is a line chart, we looked at a time series where we tracked the average day of energy consumption in each dorm. The energy consumption was measured in 5 minutes increments and in Kilowatts Per Hour (kw/h). In the app, the user is able to select which freshman dorm they desire to inspect, and whether they want to measure the energy consumption in total energy every 5 minutes or energy usage per capita. In the following section of the app, seasonal energy usage shows the seasonal differences in energy consumption for each dorm from the use of bar charts. In this panel of the Shiny app, you can select which season you would like to view as well as whether you want the data to be presented in total energy per 5 minutes or in energy per capita. The last feature of the shiny app displays energy usage per day type. This allows you to select energy use for any day of the week, as well are giving one the ability to plot either weekdays or weekends. This is shown through bar graphs are well. 
 
@@ -293,7 +247,7 @@ Clicking on the link below will take you to our Shiny App. Here, we have used ac
 
 Link to the Sustainability Dataset: https://www.kaggle.com/datasets/truecue/worldsustainabilitydataset/code?resource=download 
 
-## Findings
+## Findings {.tabset}
 
 Through our finding in renewable energy consumption, it is clear that the African countries have greater levels of energy consumption. It is illustrated that Asia, the Middle East, and North America have lower levels of renewable energy consumption. When looking at the changes over the years, one dramatic change is that the US is increasing its renewable energy consumption and countries in Asia are decreasing their renewable energy consumption. Moreover, Europe has been increasing their renewable energy consumption as well. 
 
@@ -358,46 +312,6 @@ knitr::include_graphics("img/image3.PNG")
 
 
 
-
-# Customizing your blog design
-
-
-As a *final* detail **only** if you have time, you can explore options for customizing the style of your blog. By default, we are using the `readthedown` theme from the [**rmdformats** package](https://github.com/juba/rmdformats) (see Line 6 of this file if you want to switch out themes).
-
-
-## Theme
-You can use the [**rmdformats** package](https://github.com/juba/rmdformats) to play around with some pre-built themes. There are, I'm sure, many many many more similar packages with built in themes, or you can look into how to include a CSS code chunk to customize aspects of a theme.  
-
-Using the **rmdformats** package, you can change the theme itself (Line 6): 
-
-* `rmdformats::readthedown`
-* `rmdformats::downcute` 
-  * For `downcute` only, you can add a new indented line below Line 6 with the code `downcute_theme: "chaos"` for the `downcute chaos` theme
-* `rmdformats::robobook` 
-* `rmdformats::material`
-
-You can explore additional YAML options by looking at the [**rmdformats** package](https://github.com/juba/rmdformats) page or running, for example, `?rmdformats::readthedown()` to see the help documentation for a particular theme from the package. 
-
-## Synax highlighting
-
-You can also change the code chunk syntax highlighting option (Line 7, `highlight`): 
-
-* `"default"`
-* `"tango"`
-* `"pygments"`
-* `"kate"`
-* `"monochrome"`
-* `"espresso"`
-* `"zenburn"`
-* `"haddock"`
-* `"textmate"` 
-* `NULL` for no syntax highlighting (not recommended)
-
-## Font size, type, and other customization
-
-Further customization requires adding a CSS style file or code chunk or incorporating other development options. Customization beyond the **rmdformats** package should be your lowest and final priority for the project. Ensure your content is fully prepared first.
-
-
 # References
 
 <!-- Textbook -->
@@ -416,13 +330,13 @@ Further customization requires adding a CSS style file or code chunk or incorpor
 5. “278,500+ Climate Change Stock Photos, Pictures & Royalty-Free Images.” iStock, https://www.istockphoto.com/photos/climate-change. Accessed 3 May 2023.
 
 <!-- Journal article -->
-3. Jones, Benji. “Pakistan flooding: How melting glaciers fueled the disaster.” Vox, 30 August 2022, https://www.vox.com/science-and-health/2022/8/30/23327341/pakistan-flooding-monsoon-melting-glaciers-climate-change. Accessed 2 May 2023.
+6. Jones, Benji. “Pakistan flooding: How melting glaciers fueled the disaster.” Vox, 30 August 2022, https://www.vox.com/science-and-health/2022/8/30/23327341/pakistan-flooding-monsoon-melting-glaciers-climate-change. Accessed 2 May 2023.
 
 <!-- Dataset -->
-4. “Home.” Kaggle, https://www.kaggle.com/datasets/truecue/worldsustainabilitydataset?resource=download. Accessed 2 May 2023.
+7. “Home.” Kaggle, https://www.kaggle.com/datasets/truecue/worldsustainabilitydataset?resource=download. Accessed 2 May 2023.
 
 <!-- R package -->
-5. Wickham H, Averick M, Bryan J, Chang W, McGowan LD, François R,
+8. Wickham H, Averick M, Bryan J, Chang W, McGowan LD, François R,
   Grolemund G, Hayes A, Henry L, Hester J, Kuhn M, Pedersen TL, Miller E,
   Bache SM, Müller K, Ooms J, Robinson D, Seidel DP, Spinu V, Takahashi K,
   Vaughan D, Wilke C, Woo K, Yutani H (2019). “Welcome to the tidyverse.”
@@ -430,73 +344,73 @@ Further customization requires adding a CSS style file or code chunk or incorpor
   doi:10.21105/joss.01686 <https://doi.org/10.21105/joss.01686>. 
 
 <!-- R package -->
-6. Robinson D, Hayes A, Couch S (2023). _broom: Convert Statistical Objects
+9. Robinson D, Hayes A, Couch S (2023). _broom: Convert Statistical Objects
   into Tidy Tibbles_. R package version 1.0.3,
   <https://CRAN.R-project.org/package=broom>.
   
 <!-- R package -->
-7. Slowikowski K (2023). _ggrepel: Automatically Position Non-Overlapping
+10. Slowikowski K (2023). _ggrepel: Automatically Position Non-Overlapping
   Text Labels with 'ggplot2'_. R package version 0.9.3,
   <https://CRAN.R-project.org/package=ggrepel>.
 
 <!-- R package -->
-8. Schloerke B, Cook D, Larmarange J, Briatte F, Marbach M, Thoen E, Elberg
+11. Schloerke B, Cook D, Larmarange J, Briatte F, Marbach M, Thoen E, Elberg
   A, Crowley J (2021). _GGally: Extension to 'ggplot2'_. R package version
   2.1.2, <https://CRAN.R-project.org/package=GGally>.
   
 <!-- R package -->  
-9. Wickham H, Hester J, Bryan J (2022). _readr: Read Rectangular Text
+12. Wickham H, Hester J, Bryan J (2022). _readr: Read Rectangular Text
   Data_. R package version 2.1.3,
   <https://CRAN.R-project.org/package=readr>.
   
 <!-- R package -->  
-10. Becker OScbRA, Minka ARWRvbRBEbTP, Deckmyn. A (2022). _maps: Draw
+13. Becker OScbRA, Minka ARWRvbRBEbTP, Deckmyn. A (2022). _maps: Draw
   Geographical Maps_. R package version 3.4.1,
   <https://CRAN.R-project.org/package=maps>.
   
 <!-- R package --> 
-11. Cheng J, Karambelkar B, Xie Y (2023). _leaflet: Create Interactive Web
+14. Cheng J, Karambelkar B, Xie Y (2023). _leaflet: Create Interactive Web
   Maps with the JavaScript 'Leaflet' Library_. R package version 2.1.2,
   <https://CRAN.R-project.org/package=leaflet>.
   
 <!-- R package -->  
-12. Pebesma, E., 2018. Simple Features for R: Standardized Support for
+15. Pebesma, E., 2018. Simple Features for R: Standardized Support for
   Spatial Vector Data. The R Journal 10 (1), 439-446,
   https://doi.org/10.32614/RJ-2018-009 
   
 <!-- R package -->  
-13. Bryan J (2023). _gapminder: Data from Gapminder_. R package version
+16. Bryan J (2023). _gapminder: Data from Gapminder_. R package version
   1.0.0, <https://CRAN.R-project.org/package=gapminder>.
   
 <!-- R package -->  
-14. H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag
+17. H. Wickham. ggplot2: Elegant Graphics for Data Analysis. Springer-Verlag
   New York, 2016.
   
 <!-- R package -->
-15. Benjamin S. Baumer, Daniel T. Kaplan, Nicholas J. Horton (2021). Modern
+18. Benjamin S. Baumer, Daniel T. Kaplan, Nicholas J. Horton (2021). Modern
   Data Science with R. 2nd edition, Chapman and Hall/CRC Press: Boca
   Raton, 1--673. URL
   https://www.routledge.com/Modern-Data-Science-with-R/Baumer-Kaplan-Horton/p/book/9780367191498.
   
 <!-- R package -->
-16. Wickham H, François R, Henry L, Müller K, Vaughan D (2023). _dplyr: A
+19. Wickham H, François R, Henry L, Müller K, Vaughan D (2023). _dplyr: A
   Grammar of Data Manipulation_. R package version 1.1.0,
   <https://CRAN.R-project.org/package=dplyr>.
   
 <!-- R package --> 
-17. Pedersen T, Robinson D (2022). _gganimate: A Grammar of Animated
+20. Pedersen T, Robinson D (2022). _gganimate: A Grammar of Animated
   Graphics_. R package version 1.0.8,
   <https://CRAN.R-project.org/package=gganimate>.
   
 <!-- R package -->
-18. Pedersen T (2022). _transformr: Polygon and Path Transformations_. R
+21. Pedersen T (2022). _transformr: Polygon and Path Transformations_. R
   package version 0.1.4, <https://CRAN.R-project.org/package=transformr>.
   
 <!-- R package -->
-19. Ooms J (2022). _gifski: Highest Quality GIF Encoder_. R package version
+22. Ooms J (2022). _gifski: Highest Quality GIF Encoder_. R package version
   1.6.6-1, <https://CRAN.R-project.org/package=gifski>.
   
 <!-- R package -->
-20. Urbanek S (2022). _png: Read and write PNG images_. R package version
+23. Urbanek S (2022). _png: Read and write PNG images_. R package version
   0.1-8, <https://CRAN.R-project.org/package=png>.
 
